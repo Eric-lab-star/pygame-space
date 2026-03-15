@@ -1,0 +1,13 @@
+[project]
+name = "space-ship-game"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pygame-ce>=2.5.7",
+]
+
+[tool.pyright]
+venv=".venv"
+venvPath="."
