@@ -17,8 +17,8 @@ running = True
 player_path = join("images", "player.png")
 player_surf = pygame.image.load(player_path).convert_alpha()
 player_frect = player_surf.get_frect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
-player_direction = pygame.math.Vector2(1, -1)
-player_speed = 100
+player_direction = pygame.math.Vector2(0, 0)
+player_speed = 200
 
 # star
 star_path = join("images", "star.png")
@@ -42,10 +42,19 @@ def main():
     global player_direction
     while running:
         dt = clock.tick(60) / 1000
-        print(clock.get_fps())
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+        keys = pygame.key.get_pressed()
+
+        # player inputs
+        player_direction.x = int(keys[pygame.K_d]) - int(keys[pygame.K_a])
+        player_direction.y = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
+        player_direction = (
+            player_direction.normalize() if player_direction else player_direction
+        )
+        player_frect.center += player_direction * player_speed * dt
 
         display_surface.fill("darkgray")
 
@@ -58,10 +67,6 @@ def main():
 
         # draw laser
         display_surface.blit(laser_surf, laser_frect)
-
-        # move player
-
-        player_frect.center += player_direction * player_speed * dt
 
         # draw player
         display_surface.blit(player_surf, player_frect)
