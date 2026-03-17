@@ -2,6 +2,9 @@ import pygame
 from os.path import join
 from random import randint
 
+# clock
+
+clock = pygame.time.Clock()
 
 pygame.init()
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
@@ -14,8 +17,8 @@ running = True
 player_path = join("images", "player.png")
 player_surf = pygame.image.load(player_path).convert_alpha()
 player_frect = player_surf.get_frect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
-player_direction = 1
-player_speed = 0.2
+player_direction = pygame.math.Vector2(1, -1)
+player_speed = 100
 
 # star
 star_path = join("images", "star.png")
@@ -38,6 +41,8 @@ def main():
     global running
     global player_direction
     while running:
+        dt = clock.tick(60) / 1000
+        print(clock.get_fps())
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -55,10 +60,8 @@ def main():
         display_surface.blit(laser_surf, laser_frect)
 
         # move player
-        if player_frect.right >= WINDOW_WIDTH or player_frect.left <= 0:
-            player_direction *= -1
 
-        player_frect.left += player_speed * player_direction
+        player_frect.center += player_direction * player_speed * dt
 
         # draw player
         display_surface.blit(player_surf, player_frect)
