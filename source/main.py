@@ -13,6 +13,7 @@ def main():
     pygame.display.set_caption("Space Shooter")
 
     all_sprites = pygame.sprite.Group()
+    meteor_sprites = pygame.sprite.Group()
 
     options = {
         "width": WINDOW_WIDTH,
@@ -20,11 +21,23 @@ def main():
         "group": all_sprites,
     }
 
+    meteor_options = {
+        "width": WINDOW_WIDTH,
+        "height": WINDOW_HEIGHT,
+        "group": (all_sprites, meteor_sprites),
+    }
+
+    player_options = {
+        "width": WINDOW_WIDTH,
+        "height": WINDOW_HEIGHT,
+        "group": (all_sprites, meteor_options),
+    }
+
     Star.config(**options)
-    Player.config(**options)
-    Meteor.config(**options)
+    Player.config(**player_options)
+    Meteor.config(**meteor_options)
     Star.create(10)
-    Player()
+    player = Player()
 
     # custom meteor event
     meteor_event = pygame.event.custom_type()
@@ -46,6 +59,8 @@ def main():
 
         # draw
         all_sprites.draw(display_surface)
+
+        # collision test
 
         # updates screen
         pygame.display.update()
