@@ -33,6 +33,7 @@ class Meteor(pygame.sprite.Sprite):
         self.rect: pygame.FRect = self.image.get_frect(center=pos)
         self.spawn_time = pygame.time.get_ticks()
         self.speed = random.randint(300, 600)
+        self.direction = pygame.Vector2(random.uniform(-0.5, 0.5), 1)
 
     @classmethod
     def spawn(cls, n: int):
@@ -42,7 +43,7 @@ class Meteor(pygame.sprite.Sprite):
             Meteor((x, y))
 
     def update(self, dt):
-        self.rect.centery += self.speed * dt
+        self.rect.center += self.direction * self.speed * dt
         current_time = pygame.time.get_ticks()
         if current_time - self.spawn_time >= self.kill_time:
             self.kill()

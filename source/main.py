@@ -6,10 +6,14 @@ def main():
     running = True
     clock = pygame.time.Clock()
     pygame.init()
+
     WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
     display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
     pygame.display.set_caption("Space Shooter")
+
     all_sprites = pygame.sprite.Group()
+
     options = {
         "width": WINDOW_WIDTH,
         "height": WINDOW_HEIGHT,
@@ -34,6 +38,7 @@ def main():
             elif event.type == meteor_event:
                 Meteor.spawn(2)
 
+        # updates data
         all_sprites.update(dt)
 
         # draw bg
@@ -42,6 +47,7 @@ def main():
         # draw
         all_sprites.draw(display_surface)
 
+        # updates screen
         pygame.display.update()
 
     pygame.quit()
