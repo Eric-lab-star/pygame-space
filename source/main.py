@@ -1,8 +1,6 @@
 import pygame
 from entity import Star, Player, Meteor, Laser
 
-# clock
-
 
 def main():
     running = True
@@ -28,11 +26,17 @@ def main():
     Meteor()
     Player()
 
+    # custom meteor event
+    # meteor_event = pygame.event.custom_type()
+    # pygame.time.set_timer(meteor_event, 500)
+
     while running:
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            # elif event.type == meteor_event:
+            #     print("meteor")
 
         all_sprites.update(dt)
 

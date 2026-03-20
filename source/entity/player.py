@@ -33,6 +33,23 @@ class Player(
         )
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 200
+        self.can_shoot = True
+        self.laser_time = 0
+        self.laser_cooldown = 500
+
+    def laser_timer(self):
+        if not self.can_shoot:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.laser_time >= self.laser_cooldown:
+                self.can_shoot = True
+
+    def handle_laser(self):
+        self.laser_timer()
+        recent_keys = pygame.key.get_just_pressed()
+        if recent_keys[pygame.K_SPACE] and self.can_shoot:
+            print("fire laser")
+            self.can_shoot = False
+            self.laser_time = pygame.time.get_ticks()
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
@@ -43,6 +60,4 @@ class Player(
             self.direction = self.direction.normalize()
         self.rect.center += self.direction * self.speed * dt
 
-        recent_keys = pygame.key.get_just_pressed()
-        if recent_keys[pygame.K_SPACE]:
-            print("fire laser")
+        self.handle_laser()
