@@ -2,6 +2,8 @@ from typing import ClassVar, Unpack
 import pygame
 from os.path import join
 
+from .laser import Laser
+
 from .entity_option import EntityOptions
 
 
@@ -22,6 +24,7 @@ class Player(
         cls.group = options["group"]
         cls.surf = pygame.image.load(cls.path).convert_alpha()
         cls._configured = True
+        Laser.config(group=options["group"])
 
     def __init__(self):
         if not Player._configured:
@@ -47,7 +50,7 @@ class Player(
         self.laser_timer()
         recent_keys = pygame.key.get_just_pressed()
         if recent_keys[pygame.K_SPACE] and self.can_shoot:
-            print("fire laser")
+            Laser(self.rect.midtop)
             self.can_shoot = False
             self.laser_time = pygame.time.get_ticks()
 

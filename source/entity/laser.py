@@ -2,30 +2,29 @@ from os.path import join
 from typing import ClassVar, Unpack
 import pygame
 
-from .entity_option import EntityOptions
+from .entity_option import LaserOptions
 
 
 class Laser(pygame.sprite.Sprite):
     group: ClassVar[pygame.sprite.Group]
     surf: ClassVar[pygame.Surface]
-    w: ClassVar[int]
-    h: ClassVar[int]
-    path: ClassVar[str] = join("images", "laser.png")
+    path: ClassVar[str] = join("images", "missile1.png")
     _configured: ClassVar[bool] = False
 
     @classmethod
-    def config(cls, **options: Unpack[EntityOptions]):
-        cls.w = options["width"]
-        cls.h = options["height"]
+    def config(cls, **options: Unpack[LaserOptions]):
         cls.group = options["group"]
+        cls.surf = pygame.image.load(cls.path).convert_alpha()
         cls._configured = True
 
-    def __init__(self):
+    def __init__(self, pos):
         if not Laser._configured:
             raise RuntimeError("must call Laser.config() ")
         super().__init__(Laser.group)
-        self.image = pygame.image.load(Laser.path).convert_alpha()
-        self.rect = self.image.get_frect(center=(20, Laser.h / 2))
+        self.image = Laser.surf
+        self.rect: pygame.FRect = self.image.get_frect(midbottom=pos)
 
     def update(self, dt):
-        pass
+        self.rect.centery -= 400 * dt
+        if self.rect.bottom < 0:
+            self.kill()

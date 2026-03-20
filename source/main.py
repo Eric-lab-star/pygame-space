@@ -22,7 +22,6 @@ def main():
     Laser.config(**options)
 
     Star.create(10)
-    Laser()
     Meteor()
     Player()
 
