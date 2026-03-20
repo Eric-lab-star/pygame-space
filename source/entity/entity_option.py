@@ -10,3 +10,7 @@ class EntityOptions(TypedDict):
 
 class LaserOptions(TypedDict):
     group: pygame.sprite.Group
+
+
+class MeteorOptions(TypedDict):
+    group: pygame.sprite.Group

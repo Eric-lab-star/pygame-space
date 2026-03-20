@@ -1,5 +1,5 @@
 import pygame
-from entity import Star, Player, Meteor, Laser
+from entity import Star, Player, Meteor
 
 
 def main():
@@ -19,23 +19,20 @@ def main():
     Star.config(**options)
     Player.config(**options)
     Meteor.config(**options)
-    Laser.config(**options)
-
     Star.create(10)
-    Meteor()
     Player()
 
     # custom meteor event
-    # meteor_event = pygame.event.custom_type()
-    # pygame.time.set_timer(meteor_event, 500)
+    meteor_event = pygame.event.custom_type()
+    pygame.time.set_timer(meteor_event, 500)
 
     while running:
         dt = clock.tick(60) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            # elif event.type == meteor_event:
-            #     print("meteor")
+            elif event.type == meteor_event:
+                Meteor.spawn(2)
 
         all_sprites.update(dt)
 

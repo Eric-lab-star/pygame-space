@@ -35,7 +35,7 @@ class Player(
             center=(Player.w / 2, Player.h / 2)
         )
         self.direction = pygame.math.Vector2(0, 0)
-        self.speed = 200
+        self.speed = 400
         self.can_shoot = True
         self.laser_time = 0
         self.laser_cooldown = 500
