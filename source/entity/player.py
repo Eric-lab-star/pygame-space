@@ -24,7 +24,8 @@ class Player(
         cls.group = options["group"]
         cls.surf = pygame.image.load(cls.path).convert_alpha()
         cls._configured = True
-        Laser.config(group=options["group"])
+        if not Laser._configured:
+            Laser.config(group=options["group"])
 
     def __init__(self):
         if not Player._configured:

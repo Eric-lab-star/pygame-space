@@ -1,5 +1,5 @@
 import pygame
-from entity import Star, Player, Meteor
+from entity import Star, Player, Meteor, Laser
 
 
 def main():
@@ -14,6 +14,7 @@ def main():
 
     all_sprites = pygame.sprite.Group()
     meteor_sprites = pygame.sprite.Group()
+    laser_sprites = pygame.sprite.Group()
 
     options = {
         "width": WINDOW_WIDTH,
@@ -30,10 +31,11 @@ def main():
     player_options = {
         "width": WINDOW_WIDTH,
         "height": WINDOW_HEIGHT,
-        "group": (all_sprites, meteor_options),
+        "group": all_sprites,
     }
 
     Star.config(**options)
+    Laser.config(group=(all_sprites, laser_sprites))
     Player.config(**player_options)
     Meteor.config(**meteor_options)
     Star.create(10)
@@ -61,6 +63,7 @@ def main():
         all_sprites.draw(display_surface)
 
         # collision test
+        pygame.sprite.groupcollide(laser_sprites, meteor_sprites, True, True)
 
         # updates screen
         pygame.display.update()
