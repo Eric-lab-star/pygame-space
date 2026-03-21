@@ -1,3 +1,4 @@
+import asyncio
 import pygame
 from entity import Player, Meteor
 from entity.laser import Laser
@@ -44,7 +45,7 @@ def config_entities(display: pygame.Surface):
 
 
 
-def main():
+async def main():
     running = True
     game_over = False
     clock = pygame.time.Clock()
@@ -100,8 +101,9 @@ def main():
 
         
         pygame.display.update()
+        await asyncio.sleep(0)
 
     pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
