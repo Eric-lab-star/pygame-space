@@ -24,8 +24,10 @@ class Background(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(Background.group)
         self.image: pygame.surface.Surface = Background.surf
-        self.rect = self.image.get_frect(center=(Background.w / 2, Background.h / 2))
+        self.rect:pygame.FRect = self.image.get_frect(center=(Background.w / 2, Background.h / 2))
 
     def update(self, dt):
         self.image
         self.rect
+        
+        

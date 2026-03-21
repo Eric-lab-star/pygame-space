@@ -5,7 +5,7 @@ from entity import Background
 from entity import LaserOptions
 from entity import Score
 from entity import EntityOptions, ScoreOptions
-from entity import GameOver
+from entity import GameOverText
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 9 * 50, 16 * 50
 all_sprites = pygame.sprite.Group()
@@ -39,7 +39,7 @@ def config_entities(display: pygame.Surface):
     Meteor.config(**meteor_options)
     Laser.config(**laser_options)
     Score.config(**score_opts)
-    GameOver.config(**score_opts)
+    GameOverText.config(**score_opts)
     
 
 
@@ -56,9 +56,9 @@ def main():
 
     config_entities(display_surface)
 
-    Background()
+    bg = Background()
     score = Score()
-    game_over_ui = GameOver("",pygame.Vector2(0,0))
+    game_over_ui = GameOverText()
     game_over_ui.kill()
     player = Player(display_surface.get_rect())
 
@@ -75,6 +75,7 @@ def main():
                 Meteor.spawn(5)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                 if game_over:
+                    score.reset()
                     meteor_sprites.empty()
                     laser_sprites.empty()
                     player.reset()
@@ -91,8 +92,9 @@ def main():
                 game_over = True
             all_sprites.draw(display_surface)
         else:
-            display_surface.fill("gray")
+            display_surface.blit(bg.image, bg.rect)
             all_sprites.add(game_over_ui)
+            game_over_ui.draw(f"생존시간 {score.t}초", pygame.Vector2(WINDOW_WIDTH /2, (WINDOW_HEIGHT /2) - 80))
             game_over_ui.draw("Game Over", pygame.Vector2(WINDOW_WIDTH /2, WINDOW_HEIGHT /2))
             game_over_ui.draw("R을 누르세요", pygame.Vector2(WINDOW_WIDTH /2, (WINDOW_HEIGHT /2) + 80))
 

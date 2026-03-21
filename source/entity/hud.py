@@ -15,6 +15,7 @@ class Score(pygame.sprite.Sprite):
     display_surface: pygame.surface.Surface
     width: int
     height: int
+    start_tick:int
 
     @classmethod
     def config(cls, **opts: Unpack[ScoreOptions]):
@@ -32,14 +33,17 @@ class Score(pygame.sprite.Sprite):
         self.image = Score.font.render(str(0), False, "white")
         self.rect = self.image.get_frect(midbottom=(Score.width/2, Score.height - 25))
         self.t = 0
+        self.lastes_score = 0
+        self.start_tick = pygame.time.get_ticks()
 
     def update(self, dt):
-        self.t =  pygame.time.get_ticks() // 1000  
+        self.t =  (pygame.time.get_ticks() - self.start_tick) // 1000  
         self.image = Score.font.render(str(self.t), False, "white")
         self.rect = self.image.get_frect(
             midbottom=(Score.width / 2, Score.height - 25)
         )
     def reset(self):
+        self.start_tick = pygame.time.get_ticks()
         self.t = 0
         self.image = Score.font.render(str(self.t), False, "white")
         self.rect = self.image.get_frect(
