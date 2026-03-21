@@ -1,8 +1,11 @@
-from os.path import join
 import pygame
-from entity import Star, Player, Meteor
+from entity import Player, Meteor
 from entity.laser import Laser
 from entity import Background
+from entity import LaserOptions
+from entity import Score
+from entity import EntityOptions, ScoreOptions
+from entity import GameOver
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 9 * 50, 16 * 50
 all_sprites = pygame.sprite.Group()
@@ -10,28 +13,35 @@ meteor_sprites = pygame.sprite.Group()
 laser_sprites = pygame.sprite.Group()
 
 
-def config_entities():
-    options = {
+def config_entities(display: pygame.Surface):
+    options: EntityOptions = {
         "width": WINDOW_WIDTH,
         "height": WINDOW_HEIGHT,
-        "group": all_sprites,
+        "group": (all_sprites,)
     }
 
-    meteor_options = {
+    meteor_options:EntityOptions = {
         **options,
         "group": (all_sprites, meteor_sprites),
     }
 
-    laser_options = {
-        **options,
+    laser_options:LaserOptions = {
         "group": (all_sprites, laser_sprites),
     }
 
+    score_opts: ScoreOptions ={
+            **options,
+            "display": display,
+            }
+
     Background.config(**options)
-    Star.config(**options)
     Player.config(**options)
     Meteor.config(**meteor_options)
     Laser.config(**laser_options)
+    Score.config(**score_opts)
+    GameOver.config(**score_opts)
+    
+
 
 
 def main():
@@ -43,13 +53,13 @@ def main():
     display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     pygame.display.set_caption("Space Shooter")
-    text = pygame.font.Font(join("images", "Galmuri9.ttf"), 50)
-    text_surf = text.render("text", True, "white")
 
-    config_entities()
+    config_entities(display_surface)
 
     Background()
-    Star.create(10)
+    score = Score()
+    game_over_ui = GameOver("",pygame.Vector2(0,0))
+    game_over_ui.kill()
     player = Player(display_surface.get_rect())
 
     # custom meteor event
@@ -62,27 +72,34 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == meteor_event:
-                Meteor.spawn(2)
+                Meteor.spawn(5)
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                if game_over:
+                    meteor_sprites.empty()
+                    laser_sprites.empty()
+                    player.reset()
+                    game_over_ui.kill()
+                    
+                    game_over = False
+        
 
         pygame.sprite.groupcollide(meteor_sprites, laser_sprites, True, True)
+
         if not game_over:
             all_sprites.update(dt)
-
             if pygame.sprite.spritecollide(player, meteor_sprites, False):
                 game_over = True
-
             all_sprites.draw(display_surface)
         else:
             display_surface.fill("gray")
-        display_surface.blit(
-            text_surf,
-            text_surf.get_frect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 100)),
-        )
+            all_sprites.add(game_over_ui)
+            game_over_ui.draw("Game Over", pygame.Vector2(WINDOW_WIDTH /2, WINDOW_HEIGHT /2))
+            game_over_ui.draw("R을 누르세요", pygame.Vector2(WINDOW_WIDTH /2, (WINDOW_HEIGHT /2) + 80))
 
+        
         pygame.display.update()
 
     pygame.quit()
-
 
 if __name__ == "__main__":
     main()

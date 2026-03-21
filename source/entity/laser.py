@@ -1,14 +1,14 @@
 from os.path import join
-from typing import ClassVar, Unpack
+from typing import ClassVar, Tuple, Unpack
 import pygame
 
 from .entity_option import LaserOptions
 
 
 class Laser(pygame.sprite.Sprite):
-    group: ClassVar[pygame.sprite.Group]
+    group: ClassVar[Tuple[pygame.sprite.Group, ...]]
     surf: ClassVar[pygame.Surface]
-    path: ClassVar[str] = join("images", "missile1.png")
+    path: ClassVar[str] = join("images", "missile.png")
     _configured: ClassVar[bool] = False
 
     @classmethod
@@ -25,6 +25,6 @@ class Laser(pygame.sprite.Sprite):
         self.rect: pygame.FRect = self.image.get_frect(midbottom=pos)
 
     def update(self, dt):
-        self.rect.centery -= 400 * dt
+        self.rect.centery -= 500 * dt
         if self.rect.bottom < 0:
             self.kill()

@@ -1,4 +1,4 @@
-from typing import ClassVar, Unpack
+from typing import ClassVar, Tuple, Unpack
 import pygame
 from os.path import join
 from .laser import Laser
@@ -10,7 +10,7 @@ class Player(
 ):
     w: ClassVar[int]
     h: ClassVar[int]
-    group: ClassVar[pygame.sprite.Group]
+    group: ClassVar[Tuple[pygame.sprite.Group,...]]
     path: ClassVar[str] = join("images", "player.png")
     surf: ClassVar[pygame.Surface]
     _configured: ClassVar[bool] = False
@@ -62,3 +62,7 @@ class Player(
         self.rect.center += self.direction * self.speed * dt
         self.handle_laser()
         self.rect.clamp_ip(self.screen)
+
+    def reset(self):
+        self.rect.center = pygame.Vector2(self.w /2, self.h /2)
+

@@ -1,16 +1,21 @@
-from typing import TypedDict
+from typing import Tuple, TypedDict
 import pygame
 
 
 class EntityOptions(TypedDict):
     width: int
     height: int
-    group: pygame.sprite.Group
+    group: Tuple[pygame.sprite.Group,...] 
 
 
 class LaserOptions(TypedDict):
-    group: pygame.sprite.Group
+    group: Tuple[pygame.sprite.Group, ...]
 
 
-class MeteorOptions(TypedDict):
-    group: pygame.sprite.Group
+class ScoreOptions(EntityOptions):
+    display: pygame.surface.Surface
+
+
+
+
+

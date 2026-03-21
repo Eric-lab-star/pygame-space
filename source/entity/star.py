@@ -1,4 +1,4 @@
-from typing import ClassVar, Unpack
+from typing import ClassVar, Tuple, Unpack
 import pygame
 from os.path import join
 from random import randint
@@ -11,7 +11,7 @@ class Star(pygame.sprite.Sprite):
     surf: ClassVar[pygame.Surface]
     h: ClassVar[int]
     w: ClassVar[int]
-    group: ClassVar[pygame.sprite.Group]
+    group: ClassVar[Tuple[pygame.sprite.Group,...]]
     _configured: ClassVar[bool] = False
 
     @classmethod

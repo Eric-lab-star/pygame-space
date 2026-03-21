@@ -1,5 +1,5 @@
 from os.path import join
-from typing import ClassVar, Unpack
+from typing import ClassVar, Tuple, Unpack
 import pygame
 import random
 
@@ -7,19 +7,19 @@ from .entity_option import EntityOptions
 
 
 class Meteor(pygame.sprite.Sprite):
-    group: ClassVar[pygame.sprite.Group]
+    group: ClassVar[Tuple[ pygame.sprite.Group, ... ]]
     surf: ClassVar[pygame.Surface]
     path: ClassVar[str] = join("images", "meteor.png")
     w: ClassVar[int]
     h: ClassVar[int]
     _configured: ClassVar[bool] = False
-    speed: int = 400
+    speed: int = 300
     kill_time: int = 2000
 
     @classmethod
     def config(cls, **options: Unpack[EntityOptions]):
         cls.group = options["group"]
-        cls.surf = pygame.image.load(Meteor.path).convert_alpha()
+        cls.surf = pygame.transform.scale(pygame.image.load(Meteor.path).convert_alpha(), pygame.Vector2(60,60))
         cls._configured = True
         cls.w = options["width"]
         cls.h = options["height"]
@@ -29,7 +29,7 @@ class Meteor(pygame.sprite.Sprite):
             raise RuntimeError("must call Meteor.config() ")
         super().__init__(Meteor.group)
 
-        self.image = Meteor.surf
+        self.image = Meteor.surf 
         self.rect: pygame.FRect = self.image.get_frect(center=pos)
         self.spawn_time = pygame.time.get_ticks()
         self.speed = random.randint(300, 600)

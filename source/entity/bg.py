@@ -1,5 +1,5 @@
 from os import path
-from typing import ClassVar, Unpack
+from typing import ClassVar, Tuple, Unpack
 import pygame
 
 from .entity_option import EntityOptions
@@ -8,7 +8,7 @@ from .entity_option import EntityOptions
 class Background(pygame.sprite.Sprite):
     surf: pygame.surface.Surface
     path = path.join("images", "starry_background.png")
-    group: ClassVar[pygame.sprite.Group]
+    group: ClassVar[Tuple[ pygame.sprite.Group, ...]]
     w: int
     h: int
 
@@ -17,7 +17,7 @@ class Background(pygame.sprite.Sprite):
         cls.surf = pygame.transform.scale(
             pygame.image.load(cls.path).convert_alpha(), (opts["width"], opts["height"])
         )
-        cls.group: pygame.sprite.Group = opts["group"]
+        cls.group = opts["group"]
         cls.w = opts["width"]
         cls.h = opts["height"]
 
