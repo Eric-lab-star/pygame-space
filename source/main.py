@@ -1,5 +1,6 @@
 import pygame
 from entity import Star, Player, Meteor
+from entity.laser import Laser
 
 
 def main():
@@ -7,13 +8,14 @@ def main():
     clock = pygame.time.Clock()
     pygame.init()
 
-    WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
+    WINDOW_WIDTH, WINDOW_HEIGHT = 9* 50, 16 * 50
     display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
     pygame.display.set_caption("Space Shooter")
 
     all_sprites = pygame.sprite.Group()
     meteor_sprites = pygame.sprite.Group()
+    laser_sprites = pygame.sprite.Group()
 
     options = {
         "width": WINDOW_WIDTH,
@@ -30,14 +32,22 @@ def main():
     player_options = {
         "width": WINDOW_WIDTH,
         "height": WINDOW_HEIGHT,
-        "group": (all_sprites, meteor_options),
+        "group": all_sprites,
+    }
+
+    laser_options = {
+        "width": WINDOW_WIDTH,
+        "height": WINDOW_HEIGHT,
+        "group": (all_sprites, laser_sprites),
     }
 
     Star.config(**options)
     Player.config(**player_options)
     Meteor.config(**meteor_options)
+    Laser.config(**laser_options)
     Star.create(10)
-    player = Player()
+
+    Player()
 
     # custom meteor event
     meteor_event = pygame.event.custom_type()
@@ -61,6 +71,7 @@ def main():
         all_sprites.draw(display_surface)
 
         # collision test
+        pygame.sprite.groupcollide(meteor_sprites, laser_sprites, True, True)
 
         # updates screen
         pygame.display.update()

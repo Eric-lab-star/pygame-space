@@ -3,7 +3,7 @@ from typing import ClassVar, Unpack
 import pygame
 import random
 
-from .entity_option import EntityOptions, MeteorOptions
+from .entity_option import EntityOptions
 
 
 class Meteor(pygame.sprite.Sprite):

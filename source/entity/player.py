@@ -1,9 +1,7 @@
 from typing import ClassVar, Unpack
 import pygame
 from os.path import join
-
 from .laser import Laser
-
 from .entity_option import EntityOptions
 
 
@@ -24,7 +22,6 @@ class Player(
         cls.group = options["group"]
         cls.surf = pygame.image.load(cls.path).convert_alpha()
         cls._configured = True
-        Laser.config(group=options["group"])
 
     def __init__(self):
         if not Player._configured:
@@ -62,5 +59,4 @@ class Player(
         if self.direction:
             self.direction = self.direction.normalize()
         self.rect.center += self.direction * self.speed * dt
-
         self.handle_laser()
