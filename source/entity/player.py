@@ -23,7 +23,7 @@ class Player(
         cls.surf = pygame.image.load(cls.path).convert_alpha()
         cls._configured = True
 
-    def __init__(self):
+    def __init__(self, screen_rect):
         if not Player._configured:
             raise RuntimeError("must call Player.config() ")
         super().__init__(Player.group)
@@ -36,6 +36,7 @@ class Player(
         self.can_shoot = True
         self.laser_time = 0
         self.laser_cooldown = 500
+        self.screen = screen_rect
 
     def laser_timer(self):
         if not self.can_shoot:
@@ -60,3 +61,4 @@ class Player(
             self.direction = self.direction.normalize()
         self.rect.center += self.direction * self.speed * dt
         self.handle_laser()
+        self.rect.clamp_ip(self.screen)
